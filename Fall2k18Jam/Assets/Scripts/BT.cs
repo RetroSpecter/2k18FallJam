@@ -17,10 +17,10 @@ public class BT {
 				BTEvaluationResult result = node.Test();
 				switch(result) {
 					case BTEvaluationResult.Success:
-						node.success();
+						yield return GameManager.instance.StartCoroutine(node.success());
 						break;
 					case BTEvaluationResult.Failure:
-						node.failure();
+						yield return GameManager.instance.StartCoroutine(node.failure());
 						break;
 					case BTEvaluationResult.Continue:
 						break;
@@ -40,9 +40,9 @@ public class TreeNode {
 	public TreeNode child;
 	private Func<BTEvaluationResult> test;
 
-	public Action success, failure;
+	public Func<IEnumerator> success, failure;
 
-	public TreeNode(Func<BTEvaluationResult> test, Action success, Action failure, TreeNode child = null) {
+	public TreeNode(Func<BTEvaluationResult> test, Func<IEnumerator> success, Func<IEnumerator> failure, TreeNode child = null) {
 		this.test = test;
 		this.success = success;
 		this.failure = failure;

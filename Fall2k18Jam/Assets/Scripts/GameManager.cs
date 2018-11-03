@@ -2,7 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBT : MonoBehaviour {
+public class GameManager : MonoBehaviour {
+
+	public static GameManager instance;
+	void Awake() {
+		if (instance == null) 
+			instance = this;
+		else
+			Destroy(gameObject);
+	}
 
 	// Use this for initialization
 	void Start () {
