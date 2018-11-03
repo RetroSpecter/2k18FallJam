@@ -5,11 +5,10 @@ using UnityEngine;
 public class hopScript : MonoBehaviour {
 
     private Vector3 center;
-    bool jumping;
     Vector3 mouseInit;
     Camera cameron;
     
-
+    public cacState state;
     public int MAX_POWER;
     public int JUMP_FRAMES;
     
@@ -17,7 +16,7 @@ public class hopScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         mouseInit = Vector3.zero;
-        
+        state = cacState.IDLE;
         cameron = Camera.main;
         center = new Vector3(Screen.width / 2, Screen.height / 2);
         Debug.Log(center);
@@ -36,7 +35,7 @@ public class hopScript : MonoBehaviour {
         
         
         //cameron.transform.LookAt(this.gameObject.transform.position);
-        Debug.DrawRay(transform.position, transform.forward * 8);
+        Debug.DrawRay(transform.position, transform.forward * 8, Color.red);
 	}
 
   
@@ -45,6 +44,9 @@ public class hopScript : MonoBehaviour {
     {
         Debug.Log("started charge");
         float startTime = Time.time;
+
+        state = cacState.CHARGING;
+
         while (true)
         {
             Vector3 line = Vector3.Normalize(Input.mousePosition - center);
@@ -74,9 +76,9 @@ public class hopScript : MonoBehaviour {
     //dont touch
     IEnumerator Jump(float distance)
     {
-        if (!jumping)
+        if (state != cacState.JUMPING)
         {
-            jumping = true;
+            state = cacState.JUMPING;
             float initYPos = transform.position.y;
             float xpos = 0;
             while (xpos < distance)
@@ -91,7 +93,14 @@ public class hopScript : MonoBehaviour {
             }
             transform.position = new Vector3(transform.position.x, initYPos, transform.position.z);
 
-            jumping = false;
+            state = cacState.IDLE;
         }
     }
+
+    public enum cacState
+    {
+        IDLE = 0,
+        CHARGING = 1,
+        JUMPING = 2,
+    };
 }
