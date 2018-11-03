@@ -68,7 +68,7 @@ public class hopScript : MonoBehaviour {
         {
             xpos += distance / JUMP_FRAMES;
             transform.position += transform.forward * distance / JUMP_FRAMES;
-            float quadSol = (-1 * Mathf.Pow(xpos, 2)) + (distance * xpos);
+            float quadSol = (-1f * Mathf.Pow(xpos, 2)) + (distance * xpos);
             transform.position = new Vector3(transform.position.x, initYPos + quadSol, transform.position.z);
             
             yield return 0;
