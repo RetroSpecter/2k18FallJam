@@ -12,7 +12,9 @@ public class BT {
 	}
 
 	public IEnumerator Tick() {
-		foreach (TreeNode node in treeNodes) {
+		int index = 0;
+		while (treeNodes.Count > 0) {
+			TreeNode node = treeNodes[index];
 			while (true) {
 				BTEvaluationResult result = node.Test();
 				switch(result) {
@@ -28,16 +30,20 @@ public class BT {
 						break;
 				}
 				if (result != BTEvaluationResult.Continue) {
+					index++;
+					if (index >= treeNodes.Count) {
+						index = 0;
+					}
 					break;
 				}
 				yield return null;
 			}
+			yield return null;
 		}
 	}
 }
 
 public class TreeNode {
-	public TreeNode child;
 	private Func<BTEvaluationResult> test;
 
 	public Func<IEnumerator> success, failure;
@@ -46,13 +52,10 @@ public class TreeNode {
 		this.test = test;
 		this.success = success;
 		this.failure = failure;
-		this.child = child;
 	}
 
 	public BTEvaluationResult Test() {
-		if (child != null) {
-			return child.Test();
-		}
+
 		return test();
 	}
 }
