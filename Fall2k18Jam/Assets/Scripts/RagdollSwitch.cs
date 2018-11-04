@@ -23,6 +23,7 @@ public class RagdollSwitch : MonoBehaviour {
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<EnemyBehaviour>().enabled = false;
         GetComponent<NavMeshAgent>().enabled = false;
+        GetComponentInChildren<Light>().enabled = false;
         Invoke("turnOnRagdoll", deathAnimTime);
     }
 
