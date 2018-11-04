@@ -1,0 +1,185 @@
+fileFormatVersion: 2
+guid: 0fdc37ab6117b044c9571b0b26c28df8
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: joint7
+    100004: joint9
+    100006: left_arm_joint_1
+    100008: left_arm_joint_2
+    100010: left_arm_joint_3
+    100012: left_arm_joint_4
+    100014: left_leg_joint_1
+    100016: left_leg_joint_2
+    100018: left_leg_joint_3
+    100020: Man_geo
+    100022: nurbsCircle1
+    100024: right_arm_joint_1
+    100026: right_arm_joint_2
+    100028: right_arm_joint_3
+    100030: right_arm_joint_4
+    100032: right_leg_joint_1
+    100034: right_leg_joint_2
+    100036: root_anim
+    100038: root_anim 1
+    100040: root_joint
+    100042: root_zero_group1
+    100044: spine_joint_1
+    100046: spine_joint_2
+    100048: spine_joint_3
+    100050: spine_joint_s
+    100052: spine_zero_group_4
+    100054: zero_group
+    100056: left_leg_anim
+    100058: left_leg_zero_group
+    100060: nurbsCircle1 1
+    100062: nurbsCircle1 2
+    100064: nurbsCircle4
+    100066: nurbsCircle5
+    100068: right_leg_zero_group1
+    100070: right_leg_zero_group1 1
+    100072: root_anim 2
+    100074: root_anim 3
+    100076: root_zero_group
+    100078: spine_zero_group_1
+    100080: spine_zero_group_2
+    100082: spine_zero_group_3
+    100084: zero_group1
+    100086: zleft_left_zero_group
+    400000: //RootNode
+    400002: joint7
+    400004: joint9
+    400006: left_arm_joint_1
+    400008: left_arm_joint_2
+    400010: left_arm_joint_3
+    400012: left_arm_joint_4
+    400014: left_leg_joint_1
+    400016: left_leg_joint_2
+    400018: left_leg_joint_3
+    400020: Man_geo
+    400022: nurbsCircle1
+    400024: right_arm_joint_1
+    400026: right_arm_joint_2
+    400028: right_arm_joint_3
+    400030: right_arm_joint_4
+    400032: right_leg_joint_1
+    400034: right_leg_joint_2
+    400036: root_anim
+    400038: root_anim 1
+    400040: root_joint
+    400042: root_zero_group1
+    400044: spine_joint_1
+    400046: spine_joint_2
+    400048: spine_joint_3
+    400050: spine_joint_s
+    400052: spine_zero_group_4
+    400054: zero_group
+    400056: left_leg_anim
+    400058: left_leg_zero_group
+    400060: nurbsCircle1 1
+    400062: nurbsCircle1 2
+    400064: nurbsCircle4
+    400066: nurbsCircle5
+    400068: right_leg_zero_group1
+    400070: right_leg_zero_group1 1
+    400072: root_anim 2
+    400074: root_anim 3
+    400076: root_zero_group
+    400078: spine_zero_group_1
+    400080: spine_zero_group_2
+    400082: spine_zero_group_3
+    400084: zero_group1
+    400086: zleft_left_zero_group
+    2100000: Skin1
+    2100002: Shirt1
+    2100004: Pants1
+    2100006: Shoes1
+    2300000: Man_geo
+    3300000: Man_geo
+    4300000: Man_geo
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Man_geo
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

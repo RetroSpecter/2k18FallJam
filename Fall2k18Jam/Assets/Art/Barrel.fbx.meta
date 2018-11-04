@@ -1,56 +1,14 @@
 fileFormatVersion: 2
-guid: e6548e215afb9ca418599a35075dde14
+guid: 236d4ab0e59fbb440ab67646d5c4f02b
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: cactus_poly
-    100004: head_spikes
-    100006: joints
-    100008: left_arm_joint_1
-    100010: left_arm_joint_2
-    100012: pCylinder1
-    100014: pCylinder2
-    100016: pCylinder3
-    100018: pCylinder4
-    100020: right_arm_joint_1
-    100022: right_arm_joint_2
-    100024: root_joint_1
-    100026: spine_joint_2
-    100028: spine_joint_3
     400000: //RootNode
-    400002: cactus_poly
-    400004: head_spikes
-    400006: joints
-    400008: left_arm_joint_1
-    400010: left_arm_joint_2
-    400012: pCylinder1
-    400014: pCylinder2
-    400016: pCylinder3
-    400018: pCylinder4
-    400020: right_arm_joint_1
-    400022: right_arm_joint_2
-    400024: root_joint_1
-    400026: spine_joint_2
-    400028: spine_joint_3
-    2100000: lambert2
-    2100002: lambert4
-    2300000: pCylinder1
-    2300002: pCylinder2
-    2300004: pCylinder3
-    2300006: pCylinder4
-    3300000: pCylinder1
-    3300002: pCylinder2
-    3300004: pCylinder3
-    3300006: pCylinder4
-    4300000: cactus_poly
-    4300002: pCylinder1
-    4300004: pCylinder2
-    4300006: pCylinder3
-    4300008: pCylinder4
-    9500000: //RootNode
-    13700000: cactus_poly
-    2186277476908879412: ImportLogs
+    2100000: lambert1
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: pCylinder1
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -70,7 +28,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 1
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -86,15 +44,15 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
-    importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
-    weldVertices: 1
+    weldVertices: 0
     preserveHierarchy: 0
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -103,7 +61,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -127,7 +85,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
