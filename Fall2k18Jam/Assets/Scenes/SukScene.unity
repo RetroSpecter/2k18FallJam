@@ -960,8 +960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abcff525fea56ff4ab335b2df19d85cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  landMarker: {fileID: 1034258258849546, guid: fb6ea9050b837c4458df98f3966cfc61, type: 2}
-  state: 0
+  landMarker: {fileID: 1482598985480604, guid: ff92722e4f94eab4e9342019b7416656, type: 2}
   MAX_POWER: 2
   JUMP_FRAMES: 20
 --- !u!95 &1977142267

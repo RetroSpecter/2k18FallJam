@@ -5,43 +5,90 @@ using UnityEngine;
 public class hopScript : MonoBehaviour {
 
     private Vector3 center;
-    Vector3 mouseInit;
-    Camera cameron;
+    private Vector3 mouseInit;
     private GameObject marker;
-    private cacState state;
+    private float previousLandTime;
+
 
     public GameObject landMarker;
-
-   
+    [System.NonSerialized]
+    public cacState state;
+    public bool MOUSE_CONTROLS;
     public int MAX_POWER;
     public int JUMP_FRAMES;
-    
+
+    public delegate void kill(Collision victim);
+    public kill attack;
 
 	// Use this for initialization
 	void Start () {
         mouseInit = Vector3.zero;
         state = cacState.IDLE;
-        cameron = Camera.main;
         center = new Vector3(Screen.width / 2, Screen.height / 2);
         
         this.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
         marker = GameObject.Instantiate(landMarker);
         marker.transform.position = new Vector3(0, 800, 0);
 
+        if (MOUSE_CONTROLS)
+            StartCoroutine("mouseControls");
+        else
+            StartCoroutine("keyboardControls");
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("enemy"))
+        {
+            state = cacState.ATTACKING;
+            attack(collision);
+        }
+    }
+
+    public void setIdle()
+    {
+        state = cacState.IDLE;
     }
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) { 
-            mouseInit = Input.mousePosition;
-            StartCoroutine("Charge");
-            
-        }
+        
+        
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         
-        //cameron.transform.LookAt(this.gameObject.transform.position);
-        Debug.DrawRay(transform.position, transform.forward * 8, Color.red);
+        //Debug.DrawRay(transform.position, transform.forward * 8, Color.red);
 	}
+
+    IEnumerator mouseControls()
+    {
+        while (true)
+        {
+            if (MOUSE_CONTROLS && Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                mouseInit = Input.mousePosition;
+                StartCoroutine("Charge");
+
+            }
+            yield return 0;
+        }
+    }
+
+    IEnumerator keyboardControls()
+    {
+        while (true)
+        {
+            if (Input.GetKey(KeyCode.E))
+            {
+
+            } else if (Input.GetKey(KeyCode.Q))
+            {
+
+            }
+
+            yield return 0;
+        }
+    }
 
   
 
@@ -69,14 +116,24 @@ public class hopScript : MonoBehaviour {
             if (outTime > MAX_POWER)
                 outTime = MAX_POWER;
             outTime *= 12;
+
+            RaycastHit hit = new RaycastHit();
+            Physics.Raycast(transform.position, transform.forward, out hit);
+            if (hit.collider != null && hit.distance < outTime)
+            {
+                Debug.Log("we are jumping less now");
+                outTime = hit.distance - 0.8f; //minus some offset
+            }
             marker.transform.position = transform.position + transform.forward * outTime;
 
-            if (Input.GetKeyUp(KeyCode.Mouse0))
+            if (MOUSE_CONTROLS && Input.GetKeyUp(KeyCode.Mouse0))
             {
 
                 break;
+            } else if (!MOUSE_CONTROLS && Input.GetKeyUp(KeyCode.Space))
+            {
+                break;
             }
-
             yield return 0;
         }
         marker.transform.position += transform.up * 800;
@@ -107,6 +164,7 @@ public class hopScript : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, initYPos, transform.position.z);
 
             state = cacState.IDLE;
+            previousLandTime = Time.time;
         }
     }
 
