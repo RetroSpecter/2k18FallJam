@@ -355,7 +355,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 40
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -379,7 +379,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.42415544, y: 0.000000026988678, z: -0.000000012640706, w: 0.9055894}
+  m_LocalRotation: {x: 0.42415538, y: 0.000000015012068, z: -0.0000000070311588, w: 0.90558946}
   m_LocalPosition: {x: 16.027767, y: 7.2, z: -9.488869}
   m_LocalScale: {x: 1.4338193, y: 1.0657041, z: 1.2288227}
   m_Children: []
@@ -899,7 +899,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 1977142268}
   m_Follow: {fileID: 1977142268}
   m_Lens:
-    FieldOfView: 40
+    FieldOfView: 80
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -921,7 +921,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1961056965}
-  m_LocalRotation: {x: 0.42415544, y: 0.000000026988678, z: -0.000000012640706, w: 0.9055894}
+  m_LocalRotation: {x: 0.42415538, y: 0.000000015012068, z: -0.0000000070311588, w: 0.90558946}
   m_LocalPosition: {x: 16.027767, y: 7.2, z: -9.488869}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -960,8 +960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abcff525fea56ff4ab335b2df19d85cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  landMarker: {fileID: 1034258258849546, guid: fb6ea9050b837c4458df98f3966cfc61, type: 2}
-  state: 0
+  landMarker: {fileID: 1482598985480604, guid: ff92722e4f94eab4e9342019b7416656, type: 2}
   MAX_POWER: 2
   JUMP_FRAMES: 20
 --- !u!95 &1977142267
