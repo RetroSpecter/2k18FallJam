@@ -13,53 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - {fileID: 114780410966612106}
-  - {fileID: 114142924048111044}
---- !u!114 &114142924048111044
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 8.81
-  threshold:
-    overrideState: 0
-    value: 1
-  softKnee:
-    overrideState: 0
-    value: 0.5
-  clamp:
-    overrideState: 0
-    value: 65472
-  diffusion:
-    overrideState: 0
-    value: 7
-  anamorphicRatio:
-    overrideState: 0
-    value: 0
-  color:
-    overrideState: 0
-    value: {r: 1, g: 1, b: 1, a: 1}
-  fastMode:
-    overrideState: 0
-    value: 0
-  dirtTexture:
-    overrideState: 0
-    value: {fileID: 0}
-    defaultState: 1
-  dirtIntensity:
-    overrideState: 0
-    value: 0
 --- !u!114 &114780410966612106
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -77,16 +30,16 @@ MonoBehaviour:
     value: 1
   edgeColor:
     overrideState: 1
-    value: {r: 0.3584906, g: 0.18770026, b: 0.18770026, a: 1}
+    value: {r: 0, g: 0, b: 0, a: 1}
   edgeSource:
     overrideState: 1
     value: 0
   edgeThreshold:
     overrideState: 1
-    value: 0.292
+    value: 0.081
   edgeContrast:
     overrideState: 1
-    value: 0.35
+    value: 0.33
   fillGradient:
     overrideState: 1
     value:
@@ -120,4 +73,4 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
   fillOpacity:
     overrideState: 1
-    value: 0.258
+    value: 0

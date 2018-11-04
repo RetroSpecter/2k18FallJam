@@ -1,53 +1,70 @@
 fileFormatVersion: 2
-guid: e6548e215afb9ca418599a35075dde14
+guid: f6acf6d5c4f63294284e7b23c8e216a7
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: cactus_poly
-    100004: head_spikes
-    100006: joints
-    100008: left_arm_joint_1
-    100010: left_arm_joint_2
-    100012: pCylinder1
-    100014: pCylinder2
-    100016: pCylinder3
-    100018: pCylinder4
-    100020: right_arm_joint_1
-    100022: right_arm_joint_2
-    100024: root_joint_1
-    100026: spine_joint_2
-    100028: spine_joint_3
-    400000: //RootNode
-    400002: cactus_poly
-    400004: head_spikes
-    400006: joints
-    400008: left_arm_joint_1
-    400010: left_arm_joint_2
-    400012: pCylinder1
-    400014: pCylinder2
-    400016: pCylinder3
-    400018: pCylinder4
-    400020: right_arm_joint_1
-    400022: right_arm_joint_2
-    400024: root_joint_1
-    400026: spine_joint_2
-    400028: spine_joint_3
+    100000: cactus_poly
+    100002: cactus_top_con
+    100004: //RootNode
+    100006: joint3
+    100008: joint3 1
+    100010: joints
+    100012: left
+    100014: left_arm_anim1
+    100016: left_arm_anim2
+    100018: left_arm_joint_1
+    100020: left_arm_joint_2
+    100022: left_arm_zero_group1
+    100024: left_arm_zero_group2
+    100026: right_arm_anim1
+    100028: right_arm_anim2
+    100030: right_arm_joint_1
+    100032: right_arm_joint_2
+    100034: right_arm_zero_group1
+    100036: right_arm_zero_group2
+    100038: root_anim
+    100040: root_joint_1
+    100042: root_zero_group
+    100044: spine_anim_1
+    100046: spine_anim_2
+    100048: spine_joint_2
+    100050: spine_joint_3
+    100052: spine_joint__4
+    100054: spine_zero_group1
+    100056: spine_zero_group2
+    400000: cactus_poly
+    400002: cactus_top_con
+    400004: //RootNode
+    400006: joint3
+    400008: joint3 1
+    400010: joints
+    400012: left
+    400014: left_arm_anim1
+    400016: left_arm_anim2
+    400018: left_arm_joint_1
+    400020: left_arm_joint_2
+    400022: left_arm_zero_group1
+    400024: left_arm_zero_group2
+    400026: right_arm_anim1
+    400028: right_arm_anim2
+    400030: right_arm_joint_1
+    400032: right_arm_joint_2
+    400034: right_arm_zero_group1
+    400036: right_arm_zero_group2
+    400038: root_anim
+    400040: root_joint_1
+    400042: root_zero_group
+    400044: spine_anim_1
+    400046: spine_anim_2
+    400048: spine_joint_2
+    400050: spine_joint_3
+    400052: spine_joint__4
+    400054: spine_zero_group1
+    400056: spine_zero_group2
+    2000000: left
     2100000: lambert2
-    2100002: lambert4
-    2300000: pCylinder1
-    2300002: pCylinder2
-    2300004: pCylinder3
-    2300006: pCylinder4
-    3300000: pCylinder1
-    3300002: pCylinder2
-    3300004: pCylinder3
-    3300006: pCylinder4
     4300000: cactus_poly
-    4300002: pCylinder1
-    4300004: pCylinder2
-    4300006: pCylinder3
-    4300008: pCylinder4
+    7400000: Take 001
     9500000: //RootNode
     13700000: cactus_poly
   externalObjects: {}
@@ -69,7 +86,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 1
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -81,7 +98,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
@@ -108,7 +125,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
