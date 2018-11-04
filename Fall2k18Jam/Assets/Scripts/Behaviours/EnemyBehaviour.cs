@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyBehaviour : MonoBehaviour {
+
+	private NavMeshAgent nav;
+	private int pointIndex = 0;
 
 	public List<Vector3> points;
 	private List<TreeNode> nodes;
@@ -15,6 +20,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		nav = GetComponent<NavMeshAgent>();
 		idle = new TreeNode(isPlayerSpotted, OnPlayerSpotted, OnFailure, null);
 		yellow = new TreeNode(isPlayerSpottedYellow, OnPlayerSpottedYellow, OnFailure, null);
 		red = new TreeNode(isPlayerStillInSight, OnPlayerDeath, OnPlayerEscaped, null);
@@ -22,6 +28,7 @@ public class EnemyBehaviour : MonoBehaviour {
 			idle, yellow, red
 		};
 		tree = new BT(nodes);
+		StartCoroutine(tree.Tick());
 	}
 	
 	// Update is called once per frame
@@ -34,10 +41,16 @@ public class EnemyBehaviour : MonoBehaviour {
 			playerSpotted = false;
 			tree.treeNodes.Remove(idle);
 			return BTEvaluationResult.Success;
-		} else {
-			// DO enemy movement here
-			return BTEvaluationResult.Continue;
 		}
+		if ((transform.position - points[pointIndex]).sqrMagnitude < nav.stoppingDistance*nav.stoppingDistance) {
+			Debug.Log("Setting distance");
+			pointIndex++;
+			if (pointIndex >= points.Count) {
+				pointIndex = 0;
+			}
+			nav.SetDestination(points[pointIndex]);
+		}
+		return BTEvaluationResult.Continue;
 	}
 
 	BTEvaluationResult isPlayerSpottedYellow() {
