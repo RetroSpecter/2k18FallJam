@@ -961,8 +961,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landMarker: {fileID: 1482598985480604, guid: ff92722e4f94eab4e9342019b7416656, type: 2}
+  MOUSE_CONTROLS: 0
   MAX_POWER: 2
   JUMP_FRAMES: 20
+  JUMP_REFRESH: 0.5
 --- !u!95 &1977142267
 Animator:
   serializedVersion: 3

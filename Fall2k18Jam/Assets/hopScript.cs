@@ -7,8 +7,10 @@ public class hopScript : MonoBehaviour {
     private Vector3 center;
     private Vector3 mouseInit;
     private GameObject marker;
-    private float previousLandTime;
-
+    private float previousJumpTime;
+    private bool midair;
+    private IEnumerator jumpRoutine;
+    private float initYPos;
 
     public GameObject landMarker;
     [System.NonSerialized]
@@ -16,16 +18,20 @@ public class hopScript : MonoBehaviour {
     public bool MOUSE_CONTROLS;
     public int MAX_POWER;
     public int JUMP_FRAMES;
+    public float JUMP_REFRESH;
 
     public delegate void kill(Collision victim);
     public kill attack;
 
 	// Use this for initialization
 	void Start () {
+        initYPos = transform.position.y;
+        previousJumpTime = 0;
         mouseInit = Vector3.zero;
         state = cacState.IDLE;
         center = new Vector3(Screen.width / 2, Screen.height / 2);
-        
+        midair = false;
+
         this.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
         marker = GameObject.Instantiate(landMarker);
         marker.transform.position = new Vector3(0, 800, 0);
@@ -34,14 +40,18 @@ public class hopScript : MonoBehaviour {
             StartCoroutine("mouseControls");
         else
             StartCoroutine("keyboardControls");
+        
 
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag.Equals("enemy"))
+        if (collision.gameObject.tag.Equals("enemy") && (Time.time - previousJumpTime) < JUMP_REFRESH * 2)
         {
             state = cacState.ATTACKING;
+            StopCoroutine(jumpRoutine);
+            jumpRoutine = null;
+            transform.position = new Vector3(transform.position.x, initYPos, transform.position.z);
             attack(collision);
         }
     }
@@ -64,7 +74,16 @@ public class hopScript : MonoBehaviour {
     {
         while (true)
         {
-            if (MOUSE_CONTROLS && Input.GetKeyDown(KeyCode.Mouse0))
+            Vector3 line = Vector3.Normalize(Input.mousePosition - center);
+            line.z = line.y;
+            line.y = 0;
+
+            //transform.LookAt(transform.position - line);
+
+            Quaternion toRotation = Quaternion.LookRotation(-1 * line, transform.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.1f);
+
+            if ((Time.time - previousJumpTime) > JUMP_REFRESH && Input.GetKeyDown(KeyCode.Mouse0))
             {
                 mouseInit = Input.mousePosition;
                 StartCoroutine("Charge");
@@ -80,10 +99,14 @@ public class hopScript : MonoBehaviour {
         {
             if (Input.GetKey(KeyCode.E))
             {
-
+                transform.Rotate(new Vector3(0, 150 * Time.deltaTime, 0));
             } else if (Input.GetKey(KeyCode.Q))
             {
-
+                transform.Rotate(new Vector3(0, -150 * Time.deltaTime, 0));
+            }
+            if (Input.GetKeyDown(KeyCode.Space) && (Time.time - previousJumpTime) > JUMP_REFRESH )
+            {
+                StartCoroutine("Charge");
             }
 
             yield return 0;
@@ -103,14 +126,6 @@ public class hopScript : MonoBehaviour {
         
         while (true)
         {
-            Vector3 line = Vector3.Normalize(Input.mousePosition - center);
-            line.z = line.y;
-            line.y = 0;
-            
-            //transform.LookAt(transform.position - line);
-
-            Quaternion toRotation = Quaternion.LookRotation(-1 * line, transform.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.1f);
             
             outTime = Time.time - initTime;
             if (outTime > MAX_POWER)
@@ -128,7 +143,6 @@ public class hopScript : MonoBehaviour {
 
             if (MOUSE_CONTROLS && Input.GetKeyUp(KeyCode.Mouse0))
             {
-
                 break;
             } else if (!MOUSE_CONTROLS && Input.GetKeyUp(KeyCode.Space))
             {
@@ -146,10 +160,11 @@ public class hopScript : MonoBehaviour {
     IEnumerator Jump(float distance)
     {
         Debug.Log(distance);
-        if (state != cacState.JUMPING)
+
+        if (jumpRoutine == null)
         {
+            previousJumpTime = Time.time;
             state = cacState.JUMPING;
-            float initYPos = transform.position.y;
             float xpos = 0;
             while (xpos < distance)
             {
@@ -164,8 +179,12 @@ public class hopScript : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, initYPos, transform.position.z);
 
             state = cacState.IDLE;
-            previousLandTime = Time.time;
+            
+        } else
+        {
+            Debug.Log("jump called while midair");
         }
+        jumpRoutine = null;
     }
 
     public enum cacState
