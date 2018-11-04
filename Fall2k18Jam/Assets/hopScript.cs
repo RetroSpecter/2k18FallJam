@@ -8,9 +8,11 @@ public class hopScript : MonoBehaviour {
     Vector3 mouseInit;
     Camera cameron;
     private GameObject marker;
+    private cacState state;
 
     public GameObject landMarker;
-    public cacState state;
+
+   
     public int MAX_POWER;
     public int JUMP_FRAMES;
     
@@ -113,5 +115,6 @@ public class hopScript : MonoBehaviour {
         IDLE = 0,
         CHARGING = 1,
         JUMPING = 2,
+        ATTACKING = 3,
     };
 }
