@@ -16,7 +16,6 @@ public class RagdollSwitch : MonoBehaviour {
         foreach (Rigidbody r in rigidbodies) {
             r.isKinematic = true;
         }
-        death();
 	}
 
     void death() {
