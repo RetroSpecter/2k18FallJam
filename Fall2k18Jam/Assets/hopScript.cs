@@ -97,10 +97,10 @@ public class hopScript : MonoBehaviour {
     {
         while (true)
         {
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 transform.Rotate(new Vector3(0, 150 * Time.deltaTime, 0));
-            } else if (Input.GetKey(KeyCode.Q))
+            } else if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 transform.Rotate(new Vector3(0, -150 * Time.deltaTime, 0));
             }
