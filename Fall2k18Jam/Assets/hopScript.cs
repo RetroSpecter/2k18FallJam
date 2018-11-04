@@ -9,7 +9,7 @@ public class hopScript : MonoBehaviour {
     private GameObject marker;
     private float previousJumpTime;
     private bool midair;
-    private IEnumerator jumpRoutine;
+    private Coroutine jumpRoutine;
     private float initYPos;
 
     public GameObject landMarker;
@@ -75,20 +75,25 @@ public class hopScript : MonoBehaviour {
     {
         while (true)
         {
-            Vector3 line = Vector3.Normalize(Input.mousePosition - center);
-            line.z = line.y;
-            line.y = 0;
-
-            //transform.LookAt(transform.position - line);
-
-            Quaternion toRotation = Quaternion.LookRotation(-1 * line, transform.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.1f);
-
-            if ((Time.time - previousJumpTime) > JUMP_REFRESH && Input.GetKeyDown(KeyCode.Mouse0))
+            if (state != cacState.ATTACKING)
             {
-                mouseInit = Input.mousePosition;
-                StartCoroutine("Charge");
 
+
+                Vector3 line = Vector3.Normalize(Input.mousePosition - center);
+                line.z = line.y;
+                line.y = 0;
+
+                //transform.LookAt(transform.position - line);
+
+                Quaternion toRotation = Quaternion.LookRotation(-1 * line, transform.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 0.1f);
+
+                if ((Time.time - previousJumpTime) > JUMP_REFRESH && Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    mouseInit = Input.mousePosition;
+                    StartCoroutine("Charge");
+
+                }
             }
             yield return 0;
         }
@@ -98,18 +103,21 @@ public class hopScript : MonoBehaviour {
     {
         while (true)
         {
-            if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            if (state != cacState.ATTACKING)
             {
-                transform.Rotate(new Vector3(0, 150 * Time.deltaTime, 0));
-            } else if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                transform.Rotate(new Vector3(0, -150 * Time.deltaTime, 0));
+                if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                {
+                    transform.Rotate(new Vector3(0, 150 * Time.deltaTime, 0));
+                }
+                else if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+                {
+                    transform.Rotate(new Vector3(0, -150 * Time.deltaTime, 0));
+                }
+                if (Input.GetKeyDown(KeyCode.Space) && (Time.time - previousJumpTime) > JUMP_REFRESH)
+                {
+                    StartCoroutine("Charge");
+                }
             }
-            if (Input.GetKeyDown(KeyCode.Space) && (Time.time - previousJumpTime) > JUMP_REFRESH )
-            {
-                StartCoroutine("Charge");
-            }
-
             yield return 0;
         }
     }
@@ -153,7 +161,7 @@ public class hopScript : MonoBehaviour {
         }
         marker.transform.position += transform.up * 800;
         IEnumerator jumpCoroutine = Jump(outTime);
-        StartCoroutine(jumpCoroutine);
+        jumpRoutine = StartCoroutine(jumpCoroutine);
         
     }
 
