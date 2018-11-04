@@ -36,16 +36,16 @@ MonoBehaviour:
     value: 0
   edgeThreshold:
     overrideState: 1
-    value: 0.081
+    value: 0.297
   edgeContrast:
     overrideState: 1
-    value: 0.33
+    value: 0
   fillGradient:
     overrideState: 1
     value:
       serializedVersion: 2
-      key0: {r: 1, g: 0.65882355, b: 0.050980393, a: 1}
-      key1: {r: 0.57916516, g: 0.8962264, b: 0.7716024, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -73,4 +73,4 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
   fillOpacity:
     overrideState: 1
-    value: 0
+    value: 0.026
