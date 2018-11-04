@@ -49,7 +49,8 @@ public class hopScript : MonoBehaviour {
         if (collision.gameObject.tag.Equals("enemy") && (Time.time - previousJumpTime) < JUMP_REFRESH * 2)
         {
             state = cacState.ATTACKING;
-            StopCoroutine(jumpRoutine);
+            if(jumpRoutine != null)
+                StopCoroutine(jumpRoutine);
             jumpRoutine = null;
             transform.position = new Vector3(transform.position.x, initYPos, transform.position.z);
             attack(collision);
