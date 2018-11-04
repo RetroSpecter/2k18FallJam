@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RagdollSwitch : MonoBehaviour {
 
@@ -18,7 +19,10 @@ public class RagdollSwitch : MonoBehaviour {
         }
 	}
 
-    void death() {
+    public void death() {
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<EnemyBehaviour>().enabled = false;
+        GetComponent<NavMeshAgent>().enabled = false;
         Invoke("turnOnRagdoll", deathAnimTime);
     }
 
