@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,7 +21,6 @@ public class EnemyBehaviour : MonoBehaviour {
 	private List<TreeNode> nodes;
 
 	private bool playerSpotted = false;
-	private bool sweeping = false;
 	private Vector3 lastPlayerPos = Vector3.zero;
 
 	private Coroutine lookAt;
@@ -28,7 +28,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	private BT tree;
 	TreeNode idle, yellow, red;
 
-	private Transform player;
+	private hopScript player;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +37,7 @@ public class EnemyBehaviour : MonoBehaviour {
 			viewAngle = spotlight.spotAngle;
 		}
 		nav = GetComponent<NavMeshAgent>();
-		player = FindObjectOfType<hopScript>().transform;
+		player = FindObjectOfType<hopScript>();
 		nav.updateRotation = false;
 		idle = new TreeNode(isPlayerSpotted, OnPlayerSpotted, OnFailure, null);
 		yellow = new TreeNode(isPlayerSpottedYellow, OnPlayerSpottedYellow, OnFailure, null);
@@ -47,7 +47,6 @@ public class EnemyBehaviour : MonoBehaviour {
 		};
 		tree = new BT(nodes);
 		StartCoroutine(tree.Tick());
-		nav.SetDestination(points[0]);
 	}
 	
 	// Update is called once per frame
@@ -55,56 +54,71 @@ public class EnemyBehaviour : MonoBehaviour {
 		
 	}
 
-	BTEvaluationResult isPlayerSpotted() {
-		playerSpotted = CanSeePlayer();
-		if (playerSpotted) {
-			spotlight.color = Color.red;
-		} else {
-			spotlight.color = originalColor;
-		}
-		if (playerSpotted) {
-			playerSpotted = false;
-			tree.treeNodes.Remove(idle);
-			return BTEvaluationResult.Success;
-		}
-		int pointToLookAt = (pointIndex + 1 >= points.Count)?0:pointIndex + 1;
-		if (Vector3.Distance(transform.position, nav.destination) < 2) {
-			MoveToPoint(pointToLookAt);
-		}
-		return BTEvaluationResult.Continue;
-	}
-
-	BTEvaluationResult isPlayerSpottedYellow() {
-		playerSpotted = CanSeePlayer();
-		if (playerSpotted) {
-			spotlight.color = Color.red;
-		} else {
-			spotlight.color = originalColor;
-		}
-		if (playerSpotted) {
-			playerSpotted = false;
-			tree.treeNodes.Remove(idle);
-			return BTEvaluationResult.Success;
-		}
-		if (!sweeping) {
-			int pointToLookAt = (pointIndex + 1 >= points.Count)?0:pointIndex + 1;
-			if (Vector3.Distance(transform.position, nav.destination) < 2) {
-				MoveToPoint(pointToLookAt);
-				Sweep();
+	IEnumerator isPlayerSpotted(Action<BTEvaluationResult> callback) {
+		while (true) {
+			playerSpotted = CanSeePlayer();
+			if (playerSpotted) {
+				spotlight.color = Color.red;
+			} else {
+				spotlight.color = originalColor;
 			}
+			if (playerSpotted) {
+				playerSpotted = false;
+				tree.treeNodes.Remove(idle);
+				callback(BTEvaluationResult.Success);
+				print("anemone spotted");
+				yield break;
+			}
+			int pointToLookAt = (pointIndex + 1 >= points.Count)?0:pointIndex + 1;
+			if (!nav.pathPending) {
+				if (nav.remainingDistance <= nav.stoppingDistance) {
+					if (!nav.hasPath || nav.velocity.sqrMagnitude == 0f) {
+						yield return StartCoroutine(MoveToPoint(pointToLookAt));
+					}
+				}
+			}
+			yield return null;
 		}
-		return BTEvaluationResult.Continue;
 	}
 
-	BTEvaluationResult isPlayerStillInSight() {
-		/* if player is dead, return success */
-		if (playerSpotted) {
-			// shoot at player
-			return BTEvaluationResult.Continue;
-		} else {
-			// if we lose sight of the player, go to lastKnownPos
-			// sweep, and then go back to path. This will be handled in Failure.
-			return BTEvaluationResult.Failure;
+	IEnumerator isPlayerSpottedYellow(Action<BTEvaluationResult> callback) {
+		while (true) {
+			playerSpotted = CanSeePlayer();
+			if (playerSpotted) {
+				spotlight.color = Color.red;
+			} else {
+				spotlight.color = originalColor;
+			}
+			if (playerSpotted) {
+				playerSpotted = false;
+				tree.treeNodes.Remove(idle);
+				callback(BTEvaluationResult.Success);
+				yield break;
+			}
+			int pointToLookAt = (pointIndex + 1 >= points.Count)?0:pointIndex + 1;
+			if (!nav.pathPending) {
+				if (nav.remainingDistance <= nav.stoppingDistance) {
+					if (!nav.hasPath || nav.velocity.sqrMagnitude == 0f) {
+						yield return StartCoroutine(Sweep(pointToLookAt));
+					}
+				}
+			}
+			yield return null;
+		}
+	}
+
+	IEnumerator isPlayerStillInSight(Action<BTEvaluationResult> callback) {
+		while (true) {
+			/* if player is dead, return success */
+			if (playerSpotted) {
+				// shoot at player
+				callback(BTEvaluationResult.Continue);
+			} else {
+				// if we lose sight of the player, go to lastKnownPos
+				// sweep, and then go back to path. This will be handled in Failure.
+				callback(BTEvaluationResult.Failure);
+				yield break;
+			}
 		}
 	}
 
@@ -137,59 +151,69 @@ public class EnemyBehaviour : MonoBehaviour {
 		yield return null;
 	}
 
-	void MoveToPoint(int pointToLookAt) {
-		if (lookAt != null) {
-			StopCoroutine(lookAt);
-		}
+	IEnumerator MoveToPoint(int pointToLookAt) {
 		pointIndex++;
 		if (pointIndex >= points.Count) {
 			pointIndex = 0;
 		}
-		lookAt = StartCoroutine(LookAtPoint(pointToLookAt));
+		yield return StartCoroutine(LookAtPoint(pointToLookAt));
 		nav.SetDestination(points[pointIndex]);
+	}
+
+	IEnumerator Sweep(int index) {
+		float startTime = Time.time;
+		Vector3 forward = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 left = -transform.right;
+		Vector3 lookDir = points[index] - transform.position;
+		lookDir.y = 0;
+		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
+		Quaternion nextRot = Quaternion.LookRotation(right, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(forward, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(left, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		yield return MoveToPoint(index);
 	}
 
 	IEnumerator LookAtPoint(int index) {
 		Vector3 lookDir = points[index] - transform.position;
 		lookDir.y = 0;
 		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
-		float startTime = Time.time;
-		while (transform.rotation != toRot) {
-			transform.rotation = Quaternion.Slerp(transform.rotation, toRot, Time.time - startTime);
-			yield return null;
-		}
+			float startTime = Time.time;
+			while (Time.time - startTime <= 1) {
+				print("rotating");
+				transform.rotation = Quaternion.Slerp(transform.rotation, toRot, Time.time - startTime);
+				yield return null;
+			}
+			
 	}
 
 	bool CanSeePlayer() {
-		if (Vector3.Distance(transform.position, player.position) < viewDistance) {
-			Vector3 dirToPlayer = (player.position - transform.position).normalized;
+		if (player.state != cacState.JUMPING) {
+			return false;
+		}
+		if (Vector3.Distance(transform.position, player.transform.position) < viewDistance) {
+			Vector3 dirToPlayer = (player.transform.position - transform.position).normalized;
 			float angleToPlayer = Vector3.Angle(transform.forward, dirToPlayer);
 			if (angleToPlayer < viewAngle / 2f) {
-				if (!Physics.Linecast(transform.position, player.position, viewMask)) {
+				if (!Physics.Linecast(transform.position, player.transform.position, viewMask)) {
 					return true;
 				}
 			}
 		}
 		return false;
-	}
-
-	void Sweep() {
-		sweeping = true;
-		StartCoroutine(Sweeping());
-	}
-
-	IEnumerator Sweeping() {
-		Vector3 forward = transform.forward;
-		Vector3 right = transform.right;
-		Vector3 left = -transform.right;
-		transform.rotation = Quaternion.LookRotation(right, Vector3.up);
-		yield return new WaitForSeconds(1);
-		transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
-		yield return new WaitForSeconds(1);
-		transform.rotation = Quaternion.LookRotation(left, Vector3.up);
-		yield return new WaitForSeconds(1);
-		transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
-		yield return new WaitForSeconds(1);
-		sweeping = false;
 	}
 }

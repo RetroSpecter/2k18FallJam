@@ -27,14 +27,14 @@ public class PlayerController : MonoBehaviour {
     }
 
     void attackFinished() {
-        hop.state = hopScript.cacState.IDLE;
+        hop.state = cacState.IDLE;
     }
 
 	// Update is called once per frame
 	void Update () {
-        hopScript.cacState  curState = hop.state;
-        anim.SetBool("charging", curState == hopScript.cacState.CHARGING);
-        anim.SetBool("jumping", curState == hopScript.cacState.JUMPING);
+        cacState  curState = hop.state;
+        anim.SetBool("charging", curState == cacState.CHARGING);
+        anim.SetBool("jumping", curState == cacState.JUMPING);
         //anim.SetBool("attacking", curState == hopScript.cacState);
     }
 }

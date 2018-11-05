@@ -419,7 +419,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.18910751, y: -0.0000000209759, z: 0.000000004038877, w: 0.9819564}
+  m_LocalRotation: {x: 0.18910751, y: -0.00000002097589, z: 0.000000004038807, w: 0.9819564}
   m_LocalPosition: {x: 16.027767, y: 10, z: -24.488869}
   m_LocalScale: {x: 1.4338193, y: 1.0657041, z: 1.2288227}
   m_Children: []
@@ -556,8 +556,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 100, z: 1}
-  m_Center: {x: 0, y: 49.6, z: 0}
+  m_Size: {x: 1, y: 0.99999994, z: 1.0000001}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &923179252
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -607,7 +607,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 923179250}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.6, y: 1.04, z: 6.57}
+  m_LocalPosition: {x: 11.6, y: 1.04, z: 27.6}
   m_LocalScale: {x: 2.9135506, y: 13.256534, z: 7.755785}
   m_Children: []
   m_Father: {fileID: 0}
@@ -864,7 +864,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1156,7 +1156,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1961056965}
-  m_LocalRotation: {x: 0.18910751, y: -0.0000000209759, z: 0.000000004038877, w: 0.9819564}
+  m_LocalRotation: {x: 0.18910751, y: -0.00000002097589, z: 0.000000004038807, w: 0.9819564}
   m_LocalPosition: {x: 16.027767, y: 10, z: -24.488869}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1177,6 +1177,7 @@ GameObject:
   - component: {fileID: 1977142266}
   - component: {fileID: 1977142270}
   - component: {fileID: 1977142269}
+  - component: {fileID: 1977142271}
   m_Layer: 0
   m_Name: Cactus (1)
   m_TagString: Untagged
@@ -1196,8 +1197,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landMarker: {fileID: 1482598985480604, guid: ff92722e4f94eab4e9342019b7416656, type: 2}
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
   MAX_POWER: 2
   JUMP_FRAMES: 20
+  JUMP_REFRESH: 0
 --- !u!95 &1977142267
 Animator:
   serializedVersion: 3
@@ -1261,6 +1266,18 @@ CapsuleCollider:
   m_Height: 14.172769
   m_Direction: 1
   m_Center: {x: -0.36025047, y: 6.2949934, z: 0}
+--- !u!114 &1977142271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1977142265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2752c970826656f41a58b8aca23aa7c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetButton: {fileID: 0}
 --- !u!1 &1999108103
 GameObject:
   m_ObjectHideFlags: 3

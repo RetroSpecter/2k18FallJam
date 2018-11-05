@@ -206,11 +206,11 @@ public class hopScript : MonoBehaviour {
         jumpRoutine = null;
     }
 
-    public enum cacState
-    {
-        IDLE = 0,
-        CHARGING = 1,
-        JUMPING = 2,
-        ATTACKING = 3,
-    };
 }
+public enum cacState
+{
+    IDLE = 0,
+    CHARGING = 1,
+    JUMPING = 2,
+    ATTACKING = 3,
+};

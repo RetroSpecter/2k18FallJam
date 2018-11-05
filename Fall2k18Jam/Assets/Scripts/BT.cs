@@ -16,7 +16,13 @@ public class BT {
 		while (treeNodes.Count > 0) {
 			TreeNode node = treeNodes[index];
 			while (true) {
-				BTEvaluationResult result = node.Test();
+				BTEvaluationResult result = BTEvaluationResult.Default;
+				yield return GameManager.instance.StartCoroutine(node.Test(delegate(BTEvaluationResult res) {
+					result = res;
+				}));
+				while (result == BTEvaluationResult.Default) {
+					yield return null;
+				}
 				switch(result) {
 					case BTEvaluationResult.Success:
 						yield return GameManager.instance.StartCoroutine(node.success());
@@ -44,24 +50,24 @@ public class BT {
 }
 
 public class TreeNode {
-	private Func<BTEvaluationResult> test;
+	private Func<Action<BTEvaluationResult>, IEnumerator> test;
 
 	public Func<IEnumerator> success, failure;
 
-	public TreeNode(Func<BTEvaluationResult> test, Func<IEnumerator> success, Func<IEnumerator> failure, TreeNode child = null) {
+	public TreeNode(Func<Action<BTEvaluationResult>, IEnumerator> test, Func<IEnumerator> success, Func<IEnumerator> failure, TreeNode child = null) {
 		this.test = test;
 		this.success = success;
 		this.failure = failure;
 	}
 
-	public BTEvaluationResult Test() {
-
-		return test();
+	public IEnumerator Test(Action<BTEvaluationResult> callback) {
+		return test(callback);
 	}
 }
 
 public enum BTEvaluationResult {
 	Success,
 	Failure,
-	Continue
+	Continue,
+	Default
 }
