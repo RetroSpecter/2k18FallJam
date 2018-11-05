@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour {
 
     void attack(Collision collider) {
         Animator enemyAnim = collider.gameObject.GetComponent<Animator>();
-        enemyAnim.transform.position = transform.position + transform.forward * 2f;
+        enemyAnim.transform.position = transform.position + transform.forward * 1f;
+        enemyAnim.transform.LookAt(this.transform);
         enemyAnim.Play("death");
         anim.Play("Hug");
         enemyAnim.GetComponent<RagdollSwitch>().death();
