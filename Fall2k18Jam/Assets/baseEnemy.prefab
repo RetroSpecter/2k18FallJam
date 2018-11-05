@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4299908403154566}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_arm_joint_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 135791525308252196}
   - component: {fileID: 54592470467527334}
   - component: {fileID: 144708773167816850}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: spine_joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 136111737265649266}
   - component: {fileID: 54438280948700454}
   - component: {fileID: 144720469375347814}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_leg_joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4729601276237402}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: joint7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 4508978537086736}
   - component: {fileID: 65916598077288442}
   - component: {fileID: 54812432737231926}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: root_joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4582635858049666}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: spine_joint_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4450029420533978}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_arm_joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4001713530348012}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_arm_joint_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 4717352807864114}
   - component: {fileID: 33080433622898558}
   - component: {fileID: 23275558693071218}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: gun:pCube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4613717357984978}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_leg_joint_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,7 +401,7 @@ GameObject:
   - component: {fileID: 136094888644909180}
   - component: {fileID: 54033908476786632}
   - component: {fileID: 144408243574889542}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_leg_joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 136517902523825538}
   - component: {fileID: 54610271524029590}
   - component: {fileID: 144524135159524556}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_leg_joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 136783690988545010}
   - component: {fileID: 54125989556898942}
   - component: {fileID: 144827317224895368}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: spine_joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -529,7 +529,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4742565663967368}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_arm_joint_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +561,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4798384979941962}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_arm_joint_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4738897746751234}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: joint9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,7 +625,7 @@ GameObject:
   - component: {fileID: 136074077035559030}
   - component: {fileID: 54771528972689780}
   - component: {fileID: 144027722731696650}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_leg_joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -643,7 +643,7 @@ GameObject:
   - component: {fileID: 136373298930002172}
   - component: {fileID: 54880042380732338}
   - component: {fileID: 144137884392725974}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_arm_joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 136697646543093560}
   - component: {fileID: 54621980835486568}
   - component: {fileID: 144206009548745922}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: left_arm_joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -694,7 +694,7 @@ GameObject:
   - component: {fileID: 65404592356611696}
   - component: {fileID: 54234485282857566}
   - component: {fileID: 144357349986007974}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: spine_joint_s
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,7 +744,7 @@ GameObject:
   - component: {fileID: 136781418782572406}
   - component: {fileID: 54498458361005844}
   - component: {fileID: 144435650937141732}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: right_arm_joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
