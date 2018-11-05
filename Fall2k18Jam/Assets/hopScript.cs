@@ -11,11 +11,12 @@ public class hopScript : MonoBehaviour {
     private bool midair;
     private Coroutine jumpRoutine;
     private float initYPos;
+    private bool MOUSE_CONTROLS;
 
     public GameObject landMarker;
+    public LayerMask mask;
     [System.NonSerialized]
     public cacState state;
-    public bool MOUSE_CONTROLS;
     public int MAX_POWER;
     public int JUMP_FRAMES;
     public float JUMP_REFRESH;
@@ -25,6 +26,7 @@ public class hopScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        MOUSE_CONTROLS = gameObject.GetComponent<controlSettingsHandler>().getMouseControls();
         initYPos = transform.position.y;
         previousJumpTime = 0;
         mouseInit = Vector3.zero;
@@ -67,7 +69,12 @@ public class hopScript : MonoBehaviour {
         
         
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         //Debug.DrawRay(transform.position, transform.forward * 8, Color.red);
 	}
 
@@ -142,7 +149,10 @@ public class hopScript : MonoBehaviour {
             outTime *= 12;
 
             RaycastHit hit = new RaycastHit();
-            Physics.Raycast(transform.position, transform.forward, out hit);
+            //Physics.Raycast(transform.position, transform.forward, out hit);
+            Ray r = new Ray(transform.position, transform.forward);
+            Physics.Raycast(r, out hit, 999f, mask);
+            
             if (hit.collider != null && hit.distance < outTime)
             {
                 Debug.Log("we are jumping less now");
