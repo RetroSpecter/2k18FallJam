@@ -44,8 +44,8 @@ MonoBehaviour:
     overrideState: 1
     value:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 0}
+      key0: {r: 0.06074225, g: 0.08245811, b: 0.14150941, a: 1}
+      key1: {r: 0.21462265, g: 0.25870556, b: 0.5, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -73,4 +73,4 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
   fillOpacity:
     overrideState: 1
-    value: 0.026
+    value: 0.159
