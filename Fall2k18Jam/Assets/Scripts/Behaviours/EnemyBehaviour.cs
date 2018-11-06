@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class EnemyBehaviour : MonoBehaviour {
 
 	public float viewDistance = 8;
@@ -29,6 +30,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	TreeNode idle, yellow, red;
 
 	private hopScript player;
+	private Animator anim;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +40,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 		nav = GetComponent<NavMeshAgent>();
 		player = FindObjectOfType<hopScript>();
+		anim = GetComponent<Animator>();
 		nav.updateRotation = false;
 		idle = new TreeNode(isPlayerSpotted, OnPlayerSpotted, OnFailure, null);
 		yellow = new TreeNode(isPlayerSpottedYellow, OnPlayerSpottedYellow, OnFailure, null);
@@ -56,6 +59,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerSpotted(Action<BTEvaluationResult> callback) {
 		while (true) {
+			anim.SetInteger("enemyState", 0);
 			playerSpotted = CanSeePlayer();
 			if (playerSpotted) {
 				spotlight.color = Color.red;
@@ -83,6 +87,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerSpottedYellow(Action<BTEvaluationResult> callback) {
 		while (true) {
+			anim.SetInteger("enemyState", 1);
 			playerSpotted = CanSeePlayer();
 			if (playerSpotted) {
 				spotlight.color = Color.red;
@@ -112,14 +117,25 @@ public class EnemyBehaviour : MonoBehaviour {
 			/* if player is dead, return success */
 			if (playerSpotted) {
 				// shoot at player
+				yield return StartCoroutine(Shoot());
+				anim.SetInteger("enemyState", 1);
+				lastPlayerPos = player.transform.position;
 				callback(BTEvaluationResult.Continue);
 			} else {
+				print("SKRRRT SKRRT");
 				// if we lose sight of the player, go to lastKnownPos
 				// sweep, and then go back to path. This will be handled in Failure.
+				yield return StartCoroutine(Investigate(lastPlayerPos));
 				callback(BTEvaluationResult.Failure);
 				yield break;
 			}
 		}
+	}
+
+	IEnumerator Shoot() {
+		anim.SetInteger("enemyState", 2);
+		yield return new WaitForSeconds(1.2f);
+		anim.SetInteger("enemyState", 1);
 	}
 
 	IEnumerator OnPlayerDeath() {
@@ -143,7 +159,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator OnPlayerSpottedYellow() {
 		Debug.Log("Player spotted, shooting");
-		yield return new WaitForSeconds(2);
+		yield return StartCoroutine(Shoot());
 	}
 
 	IEnumerator OnFailure() {
@@ -156,8 +172,13 @@ public class EnemyBehaviour : MonoBehaviour {
 		if (pointIndex >= points.Count) {
 			pointIndex = 0;
 		}
-		yield return StartCoroutine(LookAtPoint(pointToLookAt));
+		yield return StartCoroutine(LookAtPoint(points[pointToLookAt]));
 		nav.SetDestination(points[pointIndex]);
+	}
+	
+	IEnumerator MoveToPoint(Vector3 point) {
+		yield return StartCoroutine(LookAtPoint(point));
+		nav.SetDestination(point);
 	}
 
 	IEnumerator Sweep(int index) {
@@ -188,8 +209,64 @@ public class EnemyBehaviour : MonoBehaviour {
 		yield return MoveToPoint(index);
 	}
 
-	IEnumerator LookAtPoint(int index) {
-		Vector3 lookDir = points[index] - transform.position;
+	IEnumerator Sweep(Vector3 point) {
+		float startTime = Time.time;
+		Vector3 forward = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 left = -transform.right;
+		Vector3 lookDir = point - transform.position;
+		lookDir.y = 0;
+		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
+		Quaternion nextRot = Quaternion.LookRotation(right, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(forward, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(left, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		yield return MoveToPoint(point);
+	}
+
+	IEnumerator Investigate(Vector3 point) {
+		yield return MoveToPoint(point);
+		float startTime = Time.time;
+		Vector3 forward = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 left = -transform.right;
+		Vector3 lookDir = point - transform.position;
+		lookDir.y = 0;
+		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
+		Quaternion nextRot = Quaternion.LookRotation(right, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(forward, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(left, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+	}
+
+	IEnumerator LookAtPoint(Vector3 point) {
+		Vector3 lookDir = point - transform.position;
 		lookDir.y = 0;
 		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
 			float startTime = Time.time;

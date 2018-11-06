@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour {
         enemyAnim.Play("death");
         anim.Play("Hug");
         enemyAnim.GetComponent<RagdollSwitch>().death();
+        int rand = Random.Range(0, 2);
+        AudioManager.instance.Play("DeathGrunt" + rand);
         Invoke("attackFinished", attackTime);
     }
 
