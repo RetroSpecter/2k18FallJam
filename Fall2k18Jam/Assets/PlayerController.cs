@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour {
         int rand = Random.Range(0, 2);
         AudioManager.instance.Play("DeathGrunt" + rand);
         Invoke("attackFinished", attackTime);
+        if (collider.gameObject.GetComponent<VIPBehavior>() != null) {
+            GameManager.instance.IncrementPoints();
+        }
     }
 
     void attackFinished() {

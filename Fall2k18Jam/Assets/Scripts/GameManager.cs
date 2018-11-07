@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+	private int points = 0;
+	public bool gameOver = false;
+
+#region Singleton
 	public static GameManager instance;
 	void Awake() {
 		if (instance == null) 
@@ -11,14 +15,22 @@ public class GameManager : MonoBehaviour {
 		else
 			Destroy(gameObject);
 	}
+#endregion
 
-	// Use this for initialization
-	void Start () {
-		
+	public void IncrementPoints() {
+		points++;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public int GetPoints() {
+		return points;
+	}
+
+	public void TriggerGameOver() {
+		if (gameOver) {
+			return;
+		}
+		gameOver = true;
+		// Show that you died and with how many points.
+		// then set points = 0;
 	}
 }

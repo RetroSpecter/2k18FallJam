@@ -123,7 +123,7 @@ public class VIPBehavior : MonoBehaviour {
 		yield return StartCoroutine(LookAtPoint(points[pointToLookAt]));
 		nav.SetDestination(points[pointIndex]);
 	}
-    
+
 	IEnumerator MoveToPoint(Vector3 point) {
 		yield return StartCoroutine(LookAtPoint(point));
 		nav.SetDestination(point);
@@ -140,11 +140,6 @@ public class VIPBehavior : MonoBehaviour {
 				yield return null;
 			}
 			
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     bool CanSeePlayer() {

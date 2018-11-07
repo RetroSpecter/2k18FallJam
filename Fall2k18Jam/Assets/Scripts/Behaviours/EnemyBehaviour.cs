@@ -32,6 +32,10 @@ public class EnemyBehaviour : MonoBehaviour {
 	private hopScript player;
 	private Animator anim;
 
+	private bool moveToRedImmediate = false;
+	private Transform gun;
+	private GameObject bullet;
+
 	// Use this for initialization
 	void Start () {
 		if (spotlight != null) {
@@ -41,6 +45,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		nav = GetComponent<NavMeshAgent>();
 		player = FindObjectOfType<hopScript>();
 		anim = GetComponent<Animator>();
+		gun = transform.Find("root_joint/spine_joint_s/joint9/spine_joint_1/left_arm_joint_1/left_arm_joint_2/left_arm_joint_3/left_arm_joint_4/gun:pCube1");
 		nav.updateRotation = false;
 		idle = new TreeNode(isPlayerSpotted, OnPlayerSpotted, OnFailure, null);
 		yellow = new TreeNode(isPlayerSpottedYellow, OnPlayerSpottedYellow, OnFailure, null);
@@ -61,6 +66,10 @@ public class EnemyBehaviour : MonoBehaviour {
 		while (true) {
 			anim.SetInteger("enemyState", 0);
 			playerSpotted = CanSeePlayer();
+			if (moveToRedImmediate) {
+				callback(BTEvaluationResult.Success);
+				yield break;
+			}
 			if (playerSpotted) {
 				spotlight.color = Color.red;
 			} else {
@@ -70,6 +79,7 @@ public class EnemyBehaviour : MonoBehaviour {
 				playerSpotted = false;
 				tree.treeNodes.Remove(idle);
 				callback(BTEvaluationResult.Success);
+				anim.SetInteger("enemyState", 1);
 				print("anemone spotted");
 				yield break;
 			}
@@ -87,7 +97,10 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerSpottedYellow(Action<BTEvaluationResult> callback) {
 		while (true) {
-			anim.SetInteger("enemyState", 1);
+			if (moveToRedImmediate) {
+				callback(BTEvaluationResult.Success);
+				yield break;
+			}
 			playerSpotted = CanSeePlayer();
 			if (playerSpotted) {
 				spotlight.color = Color.red;
@@ -96,7 +109,6 @@ public class EnemyBehaviour : MonoBehaviour {
 			}
 			if (playerSpotted) {
 				playerSpotted = false;
-				tree.treeNodes.Remove(idle);
 				callback(BTEvaluationResult.Success);
 				yield break;
 			}
@@ -114,12 +126,14 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerStillInSight(Action<BTEvaluationResult> callback) {
 		while (true) {
+			if (moveToRedImmediate)
+				moveToRedImmediate = false;
 			/* if player is dead, return success */
 			if (playerSpotted) {
 				// shoot at player
+				lastPlayerPos = player.transform.position;
 				yield return StartCoroutine(Shoot());
 				anim.SetInteger("enemyState", 1);
-				lastPlayerPos = player.transform.position;
 				callback(BTEvaluationResult.Continue);
 			} else {
 				print("SKRRRT SKRRT");
@@ -134,7 +148,23 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator Shoot() {
 		anim.SetInteger("enemyState", 2);
-		yield return new WaitForSeconds(1.2f);
+		yield return new WaitForSeconds(2f);
+		float startTime = Time.time;
+		lastPlayerPos = player.transform.position;
+		transform.rotation = Quaternion.LookRotation(lastPlayerPos - transform.position, Vector3.up);
+		Destroy(Instantiate(Resources.Load("ShootParticle", typeof(GameObject)) as GameObject, gun.transform.position, Quaternion.identity), 1);
+		bullet = Instantiate(Resources.Load("Bullet", typeof(GameObject)) as GameObject, gun.transform.position, Quaternion.identity);
+		/* Vector3 temp = bullet.transform.localScale;
+		temp.x /= 19;
+		temp.y /= 11;
+		temp.z /= 51;
+		bullet.transform.localScale = temp; */
+		while (bullet != null && Time.time - startTime <= 1) {
+			bullet.transform.position = Vector3.Lerp(bullet.transform.position, lastPlayerPos, Time.time - startTime);
+			yield return null;
+		}
+		if (bullet != null)
+			Destroy(bullet);
 		anim.SetInteger("enemyState", 1);
 	}
 
@@ -159,6 +189,7 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator OnPlayerSpottedYellow() {
 		Debug.Log("Player spotted, shooting");
+		lastPlayerPos = player.transform.position;
 		yield return StartCoroutine(Shoot());
 	}
 
@@ -175,7 +206,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		yield return StartCoroutine(LookAtPoint(points[pointToLookAt]));
 		nav.SetDestination(points[pointIndex]);
 	}
-	
+
 	IEnumerator MoveToPoint(Vector3 point) {
 		yield return StartCoroutine(LookAtPoint(point));
 		nav.SetDestination(point);
@@ -288,6 +319,8 @@ public class EnemyBehaviour : MonoBehaviour {
 			if (angleToPlayer < viewAngle / 2f) {
 				if (!Physics.Linecast(transform.position, player.transform.position, viewMask)) {
 					return true;
+					if (player.state == cacState.ATTACKING)
+						moveToRedImmediate = true;
 				}
 			}
 		}
