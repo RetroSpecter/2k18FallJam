@@ -21,7 +21,16 @@ public class RagdollSwitch : MonoBehaviour {
 
     public void death() {
         GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<EnemyBehaviour>().enabled = false;
+        EnemyBehaviour enemy = GetComponent<EnemyBehaviour>();
+        if (enemy != null) {
+            GetComponent<EnemyBehaviour>().StopAllCoroutines();
+            GetComponent<EnemyBehaviour>().enabled = false;
+        }
+        VIPBehavior vip = GetComponent<VIPBehavior>();
+        if (vip != null) {
+            GetComponent<VIPBehavior>().StopAllCoroutines();
+            GetComponent<VIPBehavior>().enabled = false;
+        }
         GetComponent<NavMeshAgent>().enabled = false;
         GetComponentInChildren<Light>().enabled = false;
         Invoke("turnOnRagdoll", deathAnimTime);

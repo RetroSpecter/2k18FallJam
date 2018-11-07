@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class EnemyBehaviour : MonoBehaviour {
 
 	public float viewDistance = 8;
@@ -29,6 +30,11 @@ public class EnemyBehaviour : MonoBehaviour {
 	TreeNode idle, yellow, red;
 
 	private hopScript player;
+	private Animator anim;
+
+	private bool moveToRedImmediate = false;
+	private Transform gun;
+	private GameObject bullet;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +44,8 @@ public class EnemyBehaviour : MonoBehaviour {
 		}
 		nav = GetComponent<NavMeshAgent>();
 		player = FindObjectOfType<hopScript>();
+		anim = GetComponent<Animator>();
+		gun = transform.Find("root_joint/spine_joint_s/joint9/spine_joint_1/left_arm_joint_1/left_arm_joint_2/left_arm_joint_3/left_arm_joint_4/gun:pCube1");
 		nav.updateRotation = false;
 		idle = new TreeNode(isPlayerSpotted, OnPlayerSpotted, OnFailure, null);
 		yellow = new TreeNode(isPlayerSpottedYellow, OnPlayerSpottedYellow, OnFailure, null);
@@ -56,7 +64,12 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerSpotted(Action<BTEvaluationResult> callback) {
 		while (true) {
+			anim.SetInteger("enemyState", 0);
 			playerSpotted = CanSeePlayer();
+			if (moveToRedImmediate) {
+				callback(BTEvaluationResult.Success);
+				yield break;
+			}
 			if (playerSpotted) {
 				spotlight.color = Color.red;
 			} else {
@@ -66,6 +79,7 @@ public class EnemyBehaviour : MonoBehaviour {
 				playerSpotted = false;
 				tree.treeNodes.Remove(idle);
 				callback(BTEvaluationResult.Success);
+				anim.SetInteger("enemyState", 1);
 				print("anemone spotted");
 				yield break;
 			}
@@ -83,6 +97,10 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerSpottedYellow(Action<BTEvaluationResult> callback) {
 		while (true) {
+			if (moveToRedImmediate) {
+				callback(BTEvaluationResult.Success);
+				yield break;
+			}
 			playerSpotted = CanSeePlayer();
 			if (playerSpotted) {
 				spotlight.color = Color.red;
@@ -91,7 +109,6 @@ public class EnemyBehaviour : MonoBehaviour {
 			}
 			if (playerSpotted) {
 				playerSpotted = false;
-				tree.treeNodes.Remove(idle);
 				callback(BTEvaluationResult.Success);
 				yield break;
 			}
@@ -109,17 +126,46 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator isPlayerStillInSight(Action<BTEvaluationResult> callback) {
 		while (true) {
+			if (moveToRedImmediate)
+				moveToRedImmediate = false;
 			/* if player is dead, return success */
 			if (playerSpotted) {
 				// shoot at player
+				lastPlayerPos = player.transform.position;
+				yield return StartCoroutine(Shoot());
+				anim.SetInteger("enemyState", 1);
 				callback(BTEvaluationResult.Continue);
 			} else {
+				print("SKRRRT SKRRT");
 				// if we lose sight of the player, go to lastKnownPos
 				// sweep, and then go back to path. This will be handled in Failure.
+				yield return StartCoroutine(Investigate(lastPlayerPos));
 				callback(BTEvaluationResult.Failure);
 				yield break;
 			}
 		}
+	}
+
+	IEnumerator Shoot() {
+		anim.SetInteger("enemyState", 2);
+		yield return new WaitForSeconds(2f);
+		float startTime = Time.time;
+		lastPlayerPos = player.transform.position;
+		transform.rotation = Quaternion.LookRotation(lastPlayerPos - transform.position, Vector3.up);
+		Destroy(Instantiate(Resources.Load("ShootParticle", typeof(GameObject)) as GameObject, gun.transform.position, Quaternion.identity), 1);
+		bullet = Instantiate(Resources.Load("Bullet", typeof(GameObject)) as GameObject, gun.transform.position, Quaternion.identity);
+		/* Vector3 temp = bullet.transform.localScale;
+		temp.x /= 19;
+		temp.y /= 11;
+		temp.z /= 51;
+		bullet.transform.localScale = temp; */
+		while (bullet != null && Time.time - startTime <= 1) {
+			bullet.transform.position = Vector3.Lerp(bullet.transform.position, lastPlayerPos, Time.time - startTime);
+			yield return null;
+		}
+		if (bullet != null)
+			Destroy(bullet);
+		anim.SetInteger("enemyState", 1);
 	}
 
 	IEnumerator OnPlayerDeath() {
@@ -136,6 +182,7 @@ public class EnemyBehaviour : MonoBehaviour {
 	IEnumerator OnPlayerSpotted() {
 		Debug.Log("PLayer Sptted");
 		playerSpotted = false;
+		lastPlayerPos = player.transform.position;
 		yield return new WaitForSeconds(2);
 		// called when the player is spotted. If we want ot do a metal gear alert 
 		// noise or something this is where we do it
@@ -143,7 +190,8 @@ public class EnemyBehaviour : MonoBehaviour {
 
 	IEnumerator OnPlayerSpottedYellow() {
 		Debug.Log("Player spotted, shooting");
-		yield return new WaitForSeconds(2);
+		lastPlayerPos = player.transform.position;
+		yield return StartCoroutine(Shoot());
 	}
 
 	IEnumerator OnFailure() {
@@ -156,8 +204,13 @@ public class EnemyBehaviour : MonoBehaviour {
 		if (pointIndex >= points.Count) {
 			pointIndex = 0;
 		}
-		yield return StartCoroutine(LookAtPoint(pointToLookAt));
+		yield return StartCoroutine(LookAtPoint(points[pointToLookAt]));
 		nav.SetDestination(points[pointIndex]);
+	}
+
+	IEnumerator MoveToPoint(Vector3 point) {
+		yield return StartCoroutine(LookAtPoint(point));
+		nav.SetDestination(point);
 	}
 
 	IEnumerator Sweep(int index) {
@@ -188,8 +241,64 @@ public class EnemyBehaviour : MonoBehaviour {
 		yield return MoveToPoint(index);
 	}
 
-	IEnumerator LookAtPoint(int index) {
-		Vector3 lookDir = points[index] - transform.position;
+	IEnumerator Sweep(Vector3 point) {
+		float startTime = Time.time;
+		Vector3 forward = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 left = -transform.right;
+		Vector3 lookDir = point - transform.position;
+		lookDir.y = 0;
+		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
+		Quaternion nextRot = Quaternion.LookRotation(right, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(forward, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(left, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		yield return MoveToPoint(point);
+	}
+
+	IEnumerator Investigate(Vector3 point) {
+		yield return MoveToPoint(point);
+		float startTime = Time.time;
+		Vector3 forward = transform.forward;
+		Vector3 right = transform.right;
+		Vector3 left = -transform.right;
+		Vector3 lookDir = point - transform.position;
+		lookDir.y = 0;
+		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
+		Quaternion nextRot = Quaternion.LookRotation(right, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(forward, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+		startTime = Time.time;
+		nextRot = Quaternion.LookRotation(left, Vector3.up);
+		while (Time.time - startTime <= 1) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, nextRot, Time.time - startTime);
+			yield return null;
+		}
+	}
+
+	IEnumerator LookAtPoint(Vector3 point) {
+		Vector3 lookDir = point - transform.position;
 		lookDir.y = 0;
 		Quaternion toRot = Quaternion.LookRotation(lookDir, Vector3.up);
 			float startTime = Time.time;
@@ -211,6 +320,8 @@ public class EnemyBehaviour : MonoBehaviour {
 			if (angleToPlayer < viewAngle / 2f) {
 				if (!Physics.Linecast(transform.position, player.transform.position, viewMask)) {
 					return true;
+					if (player.state == cacState.ATTACKING)
+						moveToRedImmediate = true;
 				}
 			}
 		}

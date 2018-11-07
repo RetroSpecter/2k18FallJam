@@ -13,7 +13,7 @@ public class controlSettingsHandler : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         if(targetButton != null)
-            target = targetButton.GetComponent<Text>();
+            target = targetButton.GetComponentInChildren<Text>();
 	}
 	
 	// Update is called once per frame

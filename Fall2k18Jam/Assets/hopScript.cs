@@ -80,7 +80,7 @@ public class hopScript : MonoBehaviour {
 
     IEnumerator mouseControls()
     {
-        while (true)
+        while (!GameManager.instance.gameOver)
         {
             if (state != cacState.ATTACKING)
             {
@@ -108,7 +108,7 @@ public class hopScript : MonoBehaviour {
 
     IEnumerator keyboardControls()
     {
-        while (true)
+        while (!GameManager.instance.gameOver)
         {
             if (state != cacState.ATTACKING)
             {

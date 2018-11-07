@@ -18,7 +18,7 @@ public class menuController : MonoBehaviour {
     public void startGame()
     {
         Debug.Log("loading main scene");
-        SceneManager.LoadScene(1);   
+        GameManager.instance.StartGame();
     }
 
     public void Quit()
